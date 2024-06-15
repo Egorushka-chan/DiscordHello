@@ -1,0 +1,27 @@
+﻿<ul class="horizontal">
+    <li><img src="images/icons8-герб-украины-64.png" /></li>
+    <li><h2>Талонна система "Вітязь-М"</h2></li>
+    <li><img src="images/icons8-герб-украины-64.png" /></li>
+</ul>
+<div class="center_element">
+    Добрый вечер, дамы и господа (Юра <b class="hidden_text">Юра тупой сексист, получай!!!!</b> и Андрей)!
+</div>
+<div class="center_element">
+    Это приложение позволит вам отправлять сообщение в дискорде!
+</div>
+<div class="center_element">
+    Все что для этого надо - получить талон на сообщение и обратится к администратору для запуска системы!
+</div>
+<form method="post">
+    Талон:     @Html.TextBox("talon")
+    Сообщение: @Html.TextBox("message")
+    <input type="submit" value="Отправить"/>
+</form>
+@if (ViewBag.Error != null)
+{
+    <div class="center_element">
+        <div class="red_error">ВЫ ДЕБИЛ_КА!!!!!!</div>
+        <div>Вы отправили херню!!!!</div>
+        <div>@ViewBag.Error</div>
+    </div>
+}
