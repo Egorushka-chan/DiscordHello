@@ -1,4 +1,7 @@
-﻿using DiscordHello.Models;
+﻿using System.Diagnostics.Eventing.Reader;
+using System.Reflection;
+
+using DiscordHello.Models;
 
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,14 +19,41 @@ namespace DiscordHello.Controllers
         }
 
         [HttpPost]
-        public IActionResult Begin(string talon, string message)
+        public IActionResult Begin(string talon, string message,[FromServices] IEnumerable<IDiscordSender> discordSenders)
         {
             if(Talons.Contains(talon))
             {
                 string testServer = "343400746714136576";
 
-                IDiscordSender sender = Settings.CurrentSender;
-                sender.Send(testServer, message);
+                foreach(IDiscordSender discordSender in discordSenders)
+                {
+                    if (discordSender is FileBetterDiscordSender)
+                    {
+                        bool success = false;
+                        try
+                        {
+                            discordSender.Send(testServer, message);
+                            success = true;
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            ViewBag.Error = "Попроси админа настроить буфер";
+                        }
+                        catch (ArgumentException)
+                        {
+                            ViewBag.Error = "Ты просил отправить пустое сообщение?";
+                        }
+                        finally
+                        {
+                            if (success)
+                            {
+                                ViewBag.Message = "Запрос выполнен успешно";
+                                ModelState.Clear();
+                            }
+                        }
+                        
+                    }
+                }
             }
             else
             {

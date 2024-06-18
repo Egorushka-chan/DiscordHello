@@ -25,3 +25,9 @@
         <div>@ViewBag.Error</div>
     </div>
 }
+@if (ViewBag.Message != null)
+{
+    <div class="center_element">
+        <div style="font-size:20px">@ViewBag.Message</div>
+    </div>
+}

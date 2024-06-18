@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.IO.Pipes;
 using System.Text.Json;
-
+using DiscordHello.Models.Context;
 using Microsoft.AspNetCore.SignalR.Protocol;
 
 namespace DiscordHello.Models
@@ -12,11 +12,19 @@ namespace DiscordHello.Models
         public void Receive();
     }
 
+    /// <summary>
+    /// Этот отправщик применяется если сервер запущен на том же компьютере, что и клиент Discord
+    /// </summary>
     public class FileBetterDiscordSender : IDiscordSender
     {
+        public FileBetterDiscordSender() 
+        { 
+            
+        }
+
         List<string> messages = new List<string>();
         Task? fileAppendingTask;
-        readonly int taskTimeSeconds = 10;
+        // readonly int taskTimeSeconds = 10;
 
         public void Receive()
         {
@@ -83,6 +91,48 @@ namespace DiscordHello.Models
         {
             int seconds = DateTime.Now.Second;
             return !seconds.IsEven();
+        }
+    }
+
+    /// <summary>
+    /// Отправщик применяется если клиент Discord развернут на другой машине, на которой не развёрнут дополнительный сервер
+    /// </summary>
+    public class HttpsGetDiscordSender : IDiscordSender
+    {
+        public HttpsGetDiscordSender()
+        {
+            
+        }
+
+        public void Receive()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Send(string serverID, string content)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    /// <summary>
+    /// Отправщик применяется если клиент Discord развернут вместе с сервером
+    /// </summary>
+    public class HttpsPostDiscordSender : IDiscordSender
+    {
+        public HttpsPostDiscordSender()
+        {
+
+        }
+
+        public void Receive()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Send(string serverID, string content)
+        {
+            throw new NotImplementedException();
         }
     }
 }
